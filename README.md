@@ -33,7 +33,8 @@ git clone https://github.com/Saiful-Rasel/digital-wallet-backend.git
 cd digital-wallet-backend
 
 
-# all api 
+## ALl Api
+
 
 # user Api ===
 router.post('/register',validateRequest(createUserZodSchema),userController.createUser)
