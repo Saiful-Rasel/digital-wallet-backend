@@ -1,14 +1,12 @@
-
-import httpStatus from "http-status"
+import httpStatus from "http-status";
 import { IAuthProvider, IUser, UserRole } from "./user.interface";
 import mongoose from "mongoose";
 import { User } from "./user.model";
 import AppError from "../../ErrorHelper.ts/AppError";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import { envVariable } from "../../config/env";
 import { Wallet } from "../wallet/wallet.model";
 import { JwtPayload } from "jsonwebtoken";
-
 
 
 const createUser = async (payload: Partial<IUser>) => {
@@ -58,18 +56,43 @@ const createUser = async (payload: Partial<IUser>) => {
     await session.commitTransaction();
     session.endSession();
 
-    return user[0]; 
+    return user[0];
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     throw error;
   }
 };
-  
 
-const getAllUser = async () => {
-  const allUser = await User.find();
+
+
+const getAllUser = async (
+  payload: JwtPayload,
+  purpose?: "transfer" | "cashout"
+) => {
+  const { userId, role } = payload;
+
+  let filter: any = {};
+
+  if (role === "ADMIN") {
+    filter = { role: { $ne: "ADMIN" } };
+  } else if (role === "AGENT") {
+    filter = { role: "USER", _id: { $ne: userId } };
+  } else if (role === "USER") {
+    if (purpose === "transfer") {
+      filter = { role: "USER", _id: { $ne: userId } };
+    } else if (purpose === "cashout") {
+      filter = { role: "AGENT" };
+    }
+  }
+  const allUser = await User.find(filter).select("-password"); // password বাদ
   return allUser;
+};
+
+const getMe = async (payload: JwtPayload) => {
+  const userId = payload.userId;
+  const myProfile = await User.findById(userId);
+  return myProfile;
 };
 
 const updateUser = async (
@@ -77,14 +100,16 @@ const updateUser = async (
   payload: Partial<IUser>,
   decodedToken: JwtPayload
 ) => {
-
-  const ifUserExist = await User.findById(userId);
+  const ifUserExist = await User.findById({ userId });
   if (!ifUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
   }
 
   if (payload.role) {
-    if (decodedToken.role === UserRole.USER || decodedToken.role === UserRole.AGENT) {
+    if (
+      decodedToken.role === UserRole.USER ||
+      decodedToken.role === UserRole.AGENT
+    ) {
       throw new AppError(httpStatus.FORBIDDEN, "you are not authorized");
     }
   }
@@ -94,13 +119,16 @@ const updateUser = async (
   }
 
   if (payload.isActive || payload.isDeleted || payload.isVerified) {
-    if ( decodedToken.role === UserRole.USER) {
+    if (decodedToken.role === UserRole.USER) {
       throw new AppError(httpStatus.FORBIDDEN, "you are not authorized");
     }
   }
   if (decodedToken.role === UserRole.AGENT && decodedToken.userId !== userId) {
-  throw new AppError(httpStatus.FORBIDDEN, "Agent not authorized to update user");
-}
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "Agent not authorized to update user"
+    );
+  }
 
   if (payload.password) {
     payload.password = await bcrypt.hash(
@@ -118,5 +146,6 @@ const updateUser = async (
 export const userService = {
   createUser,
   getAllUser,
-  updateUser
+  updateUser,
+  getMe,
 };

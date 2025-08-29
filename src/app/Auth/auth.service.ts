@@ -33,6 +33,7 @@ const creadentialLogin = async (payload: Partial<IUser>) => {
     envVariable.JWT_SECRET as string,
     "1d"
   );
+  
 
   return {
     accessToken,
