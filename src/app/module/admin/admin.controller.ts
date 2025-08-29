@@ -5,7 +5,8 @@ import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 
 const adminViewAllUser = catchAsync(async (req: Request, res: Response) => {
-  const allUser = await adminService.adminViewAllUser();
+  const userId = req.user.userId
+  const allUser = await adminService.adminViewAllUser(userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -59,9 +60,9 @@ const suspendAgent = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const approveAgent = catchAsync(async (req: Request, res: Response) => {
-  const agentId = req.params.id;
+  const userId = req.params.id;
 
-  const approveAgent = await adminService.approveAgent(agentId);
+  const approveAgent = await adminService.approveAgent(userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -84,7 +85,7 @@ const blockWallet = catchAsync(async (req: Request, res: Response) => {
 const unblockWallet = catchAsync(async (req: Request, res: Response) => {
     const walletId = req.params.id;
 
-  const unBlockWallet = await adminService.blockWallet(walletId);
+  const unBlockWallet = await adminService.unBlockWallet(walletId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

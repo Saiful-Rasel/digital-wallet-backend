@@ -11,5 +11,6 @@ router.post('/deposit',checkAuth(UserRole.USER),walletController.depositWallet)
 router.post('/withdraw',checkAuth(UserRole.USER),walletController.withdrawWallet)
 router.post("/transfer", checkAuth(UserRole.USER), walletController.transfer);
 router.get("/me", checkAuth(UserRole.USER,UserRole.AGENT), walletController.myHistory);
+router.get("/user/:userId", checkAuth(UserRole.ADMIN), walletController.getWalletByUser);
 
 export const walletRoutes = router

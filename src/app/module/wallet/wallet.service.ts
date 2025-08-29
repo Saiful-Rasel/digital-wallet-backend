@@ -5,8 +5,6 @@ import mongoose from "mongoose";
 import { transactionService } from "../transactions/transaction.service";
 import { ITransaction } from "../transactions/transaction.interface";
 
-
-
 const depositWallet = async (userId: string, balance: number) => {
   if (balance <= 0) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid deposit amount");
@@ -56,7 +54,7 @@ const withdrawWallet = async (userId: string, balance: number) => {
   };
 
   await transactionService.createTransaction(transactionPayload);
-  return data
+  return data;
 };
 
 const transfer = async (
@@ -113,15 +111,23 @@ const transfer = async (
 };
 
 const myHistory = async (userId: string) => {
-  const wallet = await Wallet.findOne({ user: userId }).populate('user', 'name email');
+  const wallet = await Wallet.findOne({ user: userId }).populate(
+    "user",
+    "name email"
+  );
+  if (!wallet) throw new AppError(httpStatus.NOT_FOUND, "Wallet not found");
+  return wallet;
+};
+const getWalletByUser = async (userId: string) => {
+  const wallet = await Wallet.findOne({ user: userId })
   if (!wallet) throw new AppError(httpStatus.NOT_FOUND, "Wallet not found");
   return wallet;
 };
 
 export const walletService = {
   depositWallet,
-
+  getWalletByUser,
   withdrawWallet,
   transfer,
-  myHistory
+  myHistory,
 };

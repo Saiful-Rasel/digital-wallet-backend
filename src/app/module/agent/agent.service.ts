@@ -24,8 +24,8 @@ const createUserToAgent = async (userId: string) => {
 
 
 const cashOutFromUser = async (
-  agentId: string,
   userId: string,
+  agentId: string,
   balance: number
 ) => {
   if (balance <= 0) {

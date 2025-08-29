@@ -11,18 +11,18 @@ export const checkAuth =
   (...UserRole: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const accessToken = req.headers.authorization  || req.cookies.accessToken;
+      const accessToken = req.headers.authorization || req.cookies.accessToken;
       if (!accessToken) {
         throw new AppError(403, "No token received");
       }
-      console.log(accessToken)
+
       const verifiedToken = (await verifyToken(
         accessToken,
         envVariable.JWT_SECRET as string
       )) as JwtPayload;
 
       const isUserExist = await User.findOne({ email: verifiedToken.email });
-  console.log(isUserExist)
+
       if (!isUserExist) {
         throw new AppError(httpStatus.BAD_REQUEST, "Email Doesnot Exist");
       }
@@ -47,7 +47,7 @@ export const checkAuth =
       if (!UserRole.includes(verifiedToken.role)) {
         throw new AppError(403, "You are not permitted to view this route!!!");
       }
-      req.user = verifiedToken
+      req.user = verifiedToken;
       next();
     } catch (error) {
       next(error);

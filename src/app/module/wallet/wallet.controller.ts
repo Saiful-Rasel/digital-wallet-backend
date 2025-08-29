@@ -3,7 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { walletService } from "./wallet.service";
-import AppError from "../../ErrorHelper.ts/AppError";
+
 
 const depositWallet = catchAsync(async (req: Request, res: Response) => {
   const balance = Number(req.body.balance);
@@ -32,7 +32,7 @@ const withdrawWallet = catchAsync(async (req: Request, res: Response) => {
 const transfer = catchAsync(async (req: Request, res: Response) => {
   const balance = Number(req.body.balance);
   const { receiverId } = req.body;
-  console.log(receiverId)
+  console.log(receiverId);
   const senderId = req.user.userId;
   const wallet = await walletService.transfer(senderId, receiverId, balance);
   sendResponse(res, {
@@ -54,9 +54,20 @@ const myHistory = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getWalletByUser = catchAsync(async (req: Request, res: Response) => {
+  const {userId} = req.params;
+  const wallet = await walletService.myHistory(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "History showed successfully",
+    data: wallet,
+  });
+});
+
 export const walletController = {
   depositWallet,
-
+  getWalletByUser,
   withdrawWallet,
   transfer,
   myHistory,

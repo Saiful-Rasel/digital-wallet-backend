@@ -6,6 +6,6 @@ import { agentcontroller } from "./agent.controller";
 
 const router = Router();
 
-router.post( "/cash-out", checkAuth(UserRole.AGENT),agentcontroller.agentCashOut);
+router.post( "/cash-out", checkAuth(UserRole.USER),agentcontroller.agentCashOut);
 router.post("/cash-in", checkAuth(UserRole.AGENT), agentcontroller.agentCashIn);
 export const agentRoutes = router;
