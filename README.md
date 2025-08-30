@@ -24,13 +24,8 @@ A complete backend system for a **Digital Wallet** application with support for 
 - CORS enabled
 - ts-node-dev / nodemon for development
 
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/Saiful-Rasel/digital-wallet-backend.git
-cd digital-wallet-backend
+# Live Url
+https://digital-wallet-transaction-system-b.vercel.app/
 
 
 ## ALl Api
