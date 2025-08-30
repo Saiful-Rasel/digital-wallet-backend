@@ -10,7 +10,7 @@ router.get('/users', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN)
 router.get('/agents', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN), admin_controller_1.adminController.adminViewAllAgent);
 router.get('/transactions', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN), admin_controller_1.adminController.adminViewAllTransaction);
 router.patch('/suspend/:id', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN), admin_controller_1.adminController.suspendAgent);
-router.patch("/approve/:id", admin_controller_1.adminController.approveAgent);
+router.patch("/approve/:id", (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN), admin_controller_1.adminController.approveAgent);
 router.patch('/block/:id', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN), admin_controller_1.adminController.blockWallet);
 router.patch('/unblock/:id', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN), admin_controller_1.adminController.unblockWallet);
 exports.adminRoutes = router;

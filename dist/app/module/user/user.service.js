@@ -65,17 +65,39 @@ const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    const allUser = yield user_model_1.User.find();
+const getAllUser = (payload, purpose) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId, role } = payload;
+    let filter = {};
+    if (role === "ADMIN") {
+        filter = { role: { $ne: "ADMIN" } };
+    }
+    else if (role === "AGENT") {
+        filter = { role: "USER", _id: { $ne: userId } };
+    }
+    else if (role === "USER") {
+        if (purpose === "transfer") {
+            filter = { role: "USER", _id: { $ne: userId } };
+        }
+        else if (purpose === "cashout") {
+            filter = { role: "AGENT" };
+        }
+    }
+    const allUser = yield user_model_1.User.find(filter).select("-password"); // password বাদ
     return allUser;
 });
+const getMe = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = payload.userId;
+    const myProfile = yield user_model_1.User.findById(userId);
+    return myProfile;
+});
 const updateUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
-    const ifUserExist = yield user_model_1.User.findById(userId);
+    const ifUserExist = yield user_model_1.User.findById({ userId });
     if (!ifUserExist) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User Not Found");
     }
     if (payload.role) {
-        if (decodedToken.role === user_interface_1.UserRole.USER || decodedToken.role === user_interface_1.UserRole.AGENT) {
+        if (decodedToken.role === user_interface_1.UserRole.USER ||
+            decodedToken.role === user_interface_1.UserRole.AGENT) {
             throw new AppError_1.default(http_status_1.default.FORBIDDEN, "you are not authorized");
         }
     }
@@ -102,5 +124,6 @@ const updateUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, 
 exports.userService = {
     createUser,
     getAllUser,
-    updateUser
+    updateUser,
+    getMe,
 };

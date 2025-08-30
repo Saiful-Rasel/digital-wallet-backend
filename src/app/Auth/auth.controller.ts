@@ -10,6 +10,7 @@ const creadentialLogin = catchAsync(async (req: Request, res: Response) => {
   res.cookie("accessToken", loginInfo.accessToken, {
     httpOnly: true,
     secure: true,
+    sameSite:"none"
   });
 
   sendResponse(res, {
@@ -24,6 +25,7 @@ const logOut = catchAsync(async (req: Request, res: Response) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
     secure: true,
+    sameSite:"none"
   });
 
   sendResponse(res, {

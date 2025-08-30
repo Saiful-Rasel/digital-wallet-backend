@@ -24,13 +24,13 @@ const createUserToAgent = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(v
         statusCode: http_status_1.default.CREATED,
         success: true,
         message: "agent created Successfully",
-        data: agent
+        data: agent,
     });
 }));
 const agentCashOut = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const agentId = req.user.userId;
-    const { userId, balance } = req.body;
-    const result = yield agent_service_1.agentService.cashOutFromUser(agentId, userId, Number(balance));
+    const userId = req.user.userId;
+    const { agentId, balance } = req.body;
+    const result = yield agent_service_1.agentService.cashOutFromUser(userId, agentId, Number(balance));
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -52,5 +52,5 @@ const agentCashIn = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0,
 exports.agentcontroller = {
     createUserToAgent,
     agentCashOut,
-    agentCashIn
+    agentCashIn,
 };

@@ -14,8 +14,11 @@ const transaction_model_1 = require("../transactions/transaction.model");
 const user_interface_1 = require("../user/user.interface");
 const user_model_1 = require("../user/user.model");
 const wallet_model_1 = require("../wallet/wallet.model");
-const adminViewAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    const allUser = yield user_model_1.User.find();
+const adminViewAllUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const allUser = yield user_model_1.User.find({
+        _id: { $ne: userId },
+        role: { $nin: ["ADMIN", "AGENT"] },
+    });
     return allUser;
 });
 const adminViewAllAgent = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -31,11 +34,11 @@ const adminViewAllTransaction = () => __awaiter(void 0, void 0, void 0, function
     return allTransaction;
 });
 const suspendAgent = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const updateAgent = yield user_model_1.User.findByIdAndUpdate(userId, { isApproved: false, isVerified: false, isActive: user_interface_1.isActive.INACTIVE }, { new: true });
+    const updateAgent = yield user_model_1.User.findByIdAndUpdate(userId, { role: user_interface_1.UserRole.USER }, { new: true });
     return updateAgent;
 });
 const approveAgent = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const updateAgent = yield user_model_1.User.findByIdAndUpdate(userId, { isApproved: true, isActive: user_interface_1.isActive.ACTIVE, isVerified: true }, { new: true });
+    const updateAgent = yield user_model_1.User.findByIdAndUpdate(userId, { isApproved: true, isActive: user_interface_1.isActive.ACTIVE, isVerified: true, role: user_interface_1.UserRole.AGENT }, { new: true });
     return updateAgent;
 });
 const blockWallet = (walletId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -54,5 +57,5 @@ exports.adminService = {
     suspendAgent,
     blockWallet,
     unBlockWallet,
-    approveAgent
+    approveAgent,
 };

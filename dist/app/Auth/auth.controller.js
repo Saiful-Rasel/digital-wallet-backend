@@ -19,13 +19,30 @@ const http_status_1 = __importDefault(require("http-status"));
 const auth_service_1 = require("./auth.service");
 const creadentialLogin = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const loginInfo = yield auth_service_1.authServices.creadentialLogin(req.body);
+    res.cookie("accessToken", loginInfo.accessToken, {
+        httpOnly: true,
+        secure: true,
+    });
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,
         message: "user loggedIn Successfully",
-        data: loginInfo
+        data: loginInfo,
+    });
+}));
+const logOut = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: true,
+    });
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: "Logged out successfully",
+        data: [],
     });
 }));
 exports.authControllers = {
-    creadentialLogin
+    creadentialLogin,
+    logOut,
 };

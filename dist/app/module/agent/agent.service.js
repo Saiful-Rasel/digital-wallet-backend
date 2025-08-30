@@ -34,7 +34,7 @@ const createUserToAgent = (userId) => __awaiter(void 0, void 0, void 0, function
     yield isUserExist.save();
     return isUserExist;
 });
-const cashOutFromUser = (agentId, userId, balance) => __awaiter(void 0, void 0, void 0, function* () {
+const cashOutFromUser = (userId, agentId, balance) => __awaiter(void 0, void 0, void 0, function* () {
     if (balance <= 0) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Amount must be greater than 0");
     }

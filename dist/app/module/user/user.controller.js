@@ -24,16 +24,28 @@ const createUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, 
         statusCode: http_status_1.default.CREATED,
         success: true,
         message: "user created Successfully",
-        data: User
+        data: User,
     });
 }));
 const getAllUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const allUser = yield user_service_1.userService.getAllUser();
+    const payload = req.user;
+    const { purpose } = req.query;
+    const allUser = yield user_service_1.userService.getAllUser(payload, purpose);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,
         message: "all user found successfully",
-        data: allUser
+        data: allUser,
+    });
+}));
+const getMe = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.user;
+    const myProfile = yield user_service_1.userService.getMe(payload);
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: "User profile fetched successfully",
+        data: myProfile,
     });
 }));
 const updateUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -45,11 +57,12 @@ const updateUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
         success: true,
         statusCode: http_status_1.default.OK,
         message: "user updated successfully",
-        data: user
+        data: user,
     });
 }));
 exports.userController = {
     createUser,
     getAllUser,
-    updateUser
+    updateUser,
+    getMe,
 };

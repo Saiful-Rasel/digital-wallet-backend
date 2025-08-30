@@ -104,14 +104,21 @@ const transfer = (senderId, receiverId, balance) => __awaiter(void 0, void 0, vo
     }
 });
 const myHistory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const wallet = yield wallet_model_1.Wallet.findOne({ user: userId }).populate('user', 'name email');
+    const wallet = yield wallet_model_1.Wallet.findOne({ user: userId }).populate("user", "name email");
+    if (!wallet)
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Wallet not found");
+    return wallet;
+});
+const getWalletByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const wallet = yield wallet_model_1.Wallet.findOne({ user: userId });
     if (!wallet)
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Wallet not found");
     return wallet;
 });
 exports.walletService = {
     depositWallet,
+    getWalletByUser,
     withdrawWallet,
     transfer,
-    myHistory
+    myHistory,
 };

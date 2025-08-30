@@ -10,4 +10,5 @@ router.post('/deposit', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.USE
 router.post('/withdraw', (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.USER), wallet_controller_1.walletController.withdrawWallet);
 router.post("/transfer", (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.USER), wallet_controller_1.walletController.transfer);
 router.get("/me", (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.USER, user_interface_1.UserRole.AGENT), wallet_controller_1.walletController.myHistory);
+router.get("/user/:userId", (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.ADMIN), wallet_controller_1.walletController.getWalletByUser);
 exports.walletRoutes = router;

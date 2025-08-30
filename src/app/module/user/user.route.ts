@@ -9,7 +9,7 @@ import { agentcontroller } from "../agent/agent.controller";
 const router = Router()
 
 router.post('/register',validateRequest(createUserZodSchema),userController.createUser)
-router.get('/all-user',checkAuth(UserRole.ADMIN,UserRole.AGENT,UserRole.USER),userController.getAllUser)
+router.get('/all-user',userController.getAllUser)
 router.patch('/:id',checkAuth(UserRole.ADMIN,UserRole.USER),userController.updateUser)
 router.get("/me",checkAuth(UserRole.USER,UserRole.AGENT,UserRole.ADMIN),userController.getMe)
 // created by admin user to agent 

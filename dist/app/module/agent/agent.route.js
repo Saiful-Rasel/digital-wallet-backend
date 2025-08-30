@@ -6,6 +6,6 @@ const checkAuth_1 = require("../../middleware/checkAuth");
 const user_interface_1 = require("../user/user.interface");
 const agent_controller_1 = require("./agent.controller");
 const router = (0, express_1.Router)();
-router.post("/cash-out", (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.AGENT), agent_controller_1.agentcontroller.agentCashOut);
+router.post("/cash-out", (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.USER), agent_controller_1.agentcontroller.agentCashOut);
 router.post("/cash-in", (0, checkAuth_1.checkAuth)(user_interface_1.UserRole.AGENT), agent_controller_1.agentcontroller.agentCashIn);
 exports.agentRoutes = router;

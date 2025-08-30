@@ -18,7 +18,8 @@ const admin_service_1 = require("./admin.service");
 const sendResponse_1 = require("../../utils/sendResponse");
 const http_status_1 = __importDefault(require("http-status"));
 const adminViewAllUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const allUser = yield admin_service_1.adminService.adminViewAllUser();
+    const userId = req.user.userId;
+    const allUser = yield admin_service_1.adminService.adminViewAllUser(userId);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -65,8 +66,8 @@ const suspendAgent = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0
     });
 }));
 const approveAgent = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const agentId = req.params.id;
-    const approveAgent = yield admin_service_1.adminService.approveAgent(agentId);
+    const userId = req.params.id;
+    const approveAgent = yield admin_service_1.adminService.approveAgent(userId);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -86,7 +87,7 @@ const blockWallet = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0,
 }));
 const unblockWallet = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const walletId = req.params.id;
-    const unBlockWallet = yield admin_service_1.adminService.blockWallet(walletId);
+    const unBlockWallet = yield admin_service_1.adminService.unBlockWallet(walletId);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

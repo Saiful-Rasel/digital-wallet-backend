@@ -62,8 +62,19 @@ const myHistory = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, v
         data: wallet,
     });
 }));
+const getWalletByUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const wallet = yield wallet_service_1.walletService.myHistory(userId);
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: "History showed successfully",
+        data: wallet,
+    });
+}));
 exports.walletController = {
     depositWallet,
+    getWalletByUser,
     withdrawWallet,
     transfer,
     myHistory,

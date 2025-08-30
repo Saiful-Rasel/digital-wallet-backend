@@ -5,4 +5,5 @@ const express_1 = require("express");
 const auth_controller_1 = require("./auth.controller");
 const router = (0, express_1.Router)();
 router.use('/login', auth_controller_1.authControllers.creadentialLogin);
+router.use('/logOut', auth_controller_1.authControllers.logOut);
 exports.authRoutes = router;
