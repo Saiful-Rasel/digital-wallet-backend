@@ -4,8 +4,17 @@ import { router } from "./app/Routes";
 import { notFound } from "./app/middleware/notRoute";
 import { globalErrorHandler } from "./app/middleware/GlobalErrorHandler";
 import cookieParser from "cookie-parser";
-
+import passport from "passport";
+import session from "express-session"
+import './app/config/passport'
 const app = express();
+app.use(session({
+  secret:"dlsde",
+  resave:false,
+  saveUninitialized:false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:3000",
