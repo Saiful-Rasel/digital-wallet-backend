@@ -25,12 +25,22 @@ const creadentialLogin = catchAsync(async (req: Request, res: Response) => {
 });
 
 const callbackUrl = catchAsync(async (req: Request, res: Response) => {
-  const user = req.user;
+  const user = req.user as any;
 
   if (!user) {
     throw new AppError(status.NOT_FOUND, "User Not Found");
   }
-  const token = generateToken(user, envVariable.JWT_SECRET as string, "1d");
+  const jwtPayload = {
+    userId: user._id,
+    email: user.email,
+    role: user.role,
+  };
+  const token = generateToken(
+    jwtPayload,
+    envVariable.JWT_SECRET as string,
+    "1d"
+  );
+
   res.cookie("accessToken", token, {
     httpOnly: true,
     secure: true,
